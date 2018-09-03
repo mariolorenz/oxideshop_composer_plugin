@@ -6,9 +6,9 @@
 
 namespace OxidEsales\ComposerPlugin\Installer\Package;
 
+use Composer\Package\PackageInterface;
 use OxidEsales\ComposerPlugin\Utilities\CopyFileManager\CopyGlobFilteredFileManager;
 use Webmozart\PathUtil\Path;
-use Composer\Package\PackageInterface;
 
 /**
  * @inheritdoc
@@ -33,7 +33,7 @@ class ThemePackageInstaller extends AbstractPackageInstaller
      */
     public function install($packagePath)
     {
-        $this->getIO()->write("Installing {$this->getPackage()->getName()} package");
+        $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Installing package {$this->getPackage()->getName()}");
         $this->copyPackage($packagePath);
     }
 
@@ -44,11 +44,16 @@ class ThemePackageInstaller extends AbstractPackageInstaller
      */
     public function update($packagePath)
     {
-        $packageName = $this->getPackage()->getName();
-        $question = "Update operation will overwrite $packageName files. Do you want to continue? (y/N) ";
+        $package = $this->getPackage();
+        $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Updating theme package {$package->getName()}");
+
+        $question = "All files in the following directories will be overridden:" . PHP_EOL .
+                    "- " . $this->formThemeTargetPath() . PHP_EOL .
+                    "- " . Path::join($this->getRootDirectory(), $this->formAssetsDirectoryName()) . PHP_EOL .
+                    "Do you want to continue? (y/N) ";
 
         if ($this->askQuestionIfNotInstalled($question)) {
-            $this->getIO()->write("Copying theme {$this->getPackage()->getName()} files...");
+            $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Copying files ...");
             $this->copyPackage($packagePath);
         }
     }

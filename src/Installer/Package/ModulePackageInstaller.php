@@ -31,7 +31,7 @@ class ModulePackageInstaller extends AbstractPackageInstaller
      */
     public function install($packagePath)
     {
-        $this->getIO()->write("Installing module {$this->getPackageName()} package.");
+        $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Installing package {$this->getPackage()->getName()}");
         $this->copyPackage($packagePath);
     }
 
@@ -42,9 +42,15 @@ class ModulePackageInstaller extends AbstractPackageInstaller
      */
     public function update($packagePath)
     {
-        if ($this->askQuestionIfNotInstalled("Update operation will overwrite {$this->getPackageName()} files."
-            ." Do you want to continue? (y/N) ")) {
-            $this->getIO()->write("Copying module {$this->getPackageName()} files...");
+        $package = $this->getPackage();
+        $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Updating module package {$package->getName()}");
+
+        $question = "All files in the following directories will be overridden:" . PHP_EOL .
+                    "- " . $this->formTargetPath() . PHP_EOL .
+                    "Do you want to continue? (y/N) ";
+
+        if ($this->askQuestionIfNotInstalled($question)) {
+            $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Copying files ...");
             $this->copyPackage($packagePath);
         }
     }

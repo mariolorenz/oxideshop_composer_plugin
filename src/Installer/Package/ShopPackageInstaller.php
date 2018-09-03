@@ -41,7 +41,7 @@ class ShopPackageInstaller extends AbstractPackageInstaller
      */
     public function install($packagePath)
     {
-        $this->getIO()->write("Installing shop package.");
+        $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Installing shop package.");
         $this->copyPackage($packagePath);
     }
 
@@ -52,10 +52,15 @@ class ShopPackageInstaller extends AbstractPackageInstaller
      */
     public function update($packagePath)
     {
-        $this->getIO()->write("Installing shop package.");
+        $package = $this->getPackage();
+        $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Updating OXID eShop package {$package->getName()}");
 
-        if ($this->askQuestionIfNotInstalled('Do you want to overwrite existing OXID eShop files? (y/N) ')) {
-            $this->getIO()->write("Copying shop files to source directory...");
+        $question = "All files in the following directories will be overridden:" . PHP_EOL .
+                    "- " . $this->getTargetDirectoryOfShopSource() . PHP_EOL .
+                    "Do you want to continue? (y/N) ";
+
+        if ($this->askQuestionIfNotInstalled($question)) {
+            $this->getIO()->write("<info>oxid-esales/oxideshop-composer-plugin:</info> Copying files ...");
             $this->copyPackage($packagePath);
         }
     }
